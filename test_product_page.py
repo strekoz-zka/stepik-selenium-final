@@ -8,6 +8,7 @@ promo_links = [base_link + '/?promo=offer' + str(n) if n != 7
                for n in range(10)]
 
 
+@pytest.mark.skip(reason='for testing reasons')
 @pytest.mark.parametrize('link', promo_links)
 def test_guest_can_add_product_to_basket(browser, link):
     page = ProductPage(browser, link)
@@ -16,3 +17,25 @@ def test_guest_can_add_product_to_basket(browser, link):
     page.solve_quiz_and_get_code()
     page.should_be_item_name_in_add_to_cart_message()
     page.should_be_correct_cart_sum()
+
+
+@pytest.mark.skip(reason="Wrong test case")
+def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
+    page = ProductPage(browser, base_link)
+    page.open()
+    page.add_to_cart()
+    page.should_not_be_success_message()
+
+
+def test_guest_cant_see_success_message(browser):
+    page = ProductPage(browser, base_link)
+    page.open()
+    page.should_not_be_success_message()
+
+
+@pytest.mark.xfail(reason="ticket in process")
+def test_message_disappeared_after_adding_product_to_basket(browser):
+    page = ProductPage(browser, base_link)
+    page.open()
+    page.add_to_cart()
+    page.should_success_message_disappear()

@@ -18,3 +18,4 @@ class ProductPageLocators:
     CART_COST_MINI = (By.CSS_SELECTOR, ".basket-mini")
     ITEM_NAME = (By.CSS_SELECTOR, ".product_main h1")
     ITEM_COST = (By.CSS_SELECTOR, ".product_main .price_color")
+    SUCCESS_MESSAGE = (By.CSS_SELECTOR, "#messages div")
