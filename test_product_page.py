@@ -12,32 +12,7 @@ promo_links = [base_link + '/?promo=offer' + str(n) if n != 7
                for n in range(10)]
 
 
-@pytest.mark.skip(reason='for testing reasons')
-@pytest.mark.parametrize('link', promo_links)
-def test_guest_can_add_product_to_basket(browser, link):
-    page = ProductPage(browser, link)
-    page.open()
-    page.add_to_cart()
-    page.solve_quiz_and_get_code()
-    page.should_be_item_name_in_add_to_cart_message()
-    page.should_be_correct_cart_sum()
-
-
-@pytest.mark.skip(reason="Wrong test case")
-def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
-    page = ProductPage(browser, base_link)
-    page.open()
-    page.add_to_cart()
-    page.should_not_be_success_message()
-
-
-def test_guest_cant_see_success_message(browser):
-    page = ProductPage(browser, base_link)
-    page.open()
-    page.should_not_be_success_message()
-
-
-@pytest.mark.xfail(reason="ticket in process")
+@pytest.mark.xfail(reason="ticket in process?")
 def test_message_disappeared_after_adding_product_to_basket(browser):
     page = ProductPage(browser, base_link)
     page.open()
@@ -45,13 +20,18 @@ def test_message_disappeared_after_adding_product_to_basket(browser):
     page.should_success_message_disappear()
 
 
-def test_guest_should_see_login_link_on_product_page(browser):
-    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
-    page = ProductPage(browser, link)
+# @pytest.mark.parametrize('link', promo_links)
+@pytest.mark.need_review
+def test_guest_can_add_product_to_basket(browser):
+    page = ProductPage(browser, base_link)
     page.open()
-    page.should_be_login_link()
+    page.add_to_cart()
+    # page.solve_quiz_and_get_code()
+    page.should_be_item_name_in_add_to_cart_message()
+    page.should_be_correct_cart_sum()
 
 
+@pytest.mark.need_review
 def test_guest_can_go_to_login_page_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
     page = ProductPage(browser, link)
@@ -62,6 +42,7 @@ def test_guest_can_go_to_login_page_from_product_page(browser):
 
 
 @pytest.mark.guest_opens_basket
+@pytest.mark.need_review
 def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     link = "http://selenium1py.pythonanywhere.com/catalogue/coders-at-work_207"
     page = ProductPage(browser, link)
@@ -70,6 +51,27 @@ def test_guest_cant_see_product_in_basket_opened_from_product_page(browser):
     basket = BasketPage(browser, browser.current_url)
     basket.should_be_empty()
     basket.should_be_empty_message()
+
+
+def test_guest_cant_see_success_message(browser):
+    page = ProductPage(browser, base_link)
+    page.open()
+    page.should_not_be_success_message()
+
+
+@pytest.mark.skip(reason="Wrong test case")
+def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
+    page = ProductPage(browser, base_link)
+    page.open()
+    page.add_to_cart()
+    page.should_not_be_success_message()
+
+
+def test_guest_should_see_login_link_on_product_page(browser):
+    link = "http://selenium1py.pythonanywhere.com/en-gb/catalogue/the-city-and-the-stars_95/"
+    page = ProductPage(browser, link)
+    page.open()
+    page.should_be_login_link()
 
 
 class TestUserAddToBasketFromProductPage:
@@ -84,14 +86,15 @@ class TestUserAddToBasketFromProductPage:
         login_page.register_new_user(email, password)
         login_page.should_be_authorized_user()
 
-    def test_user_cant_see_success_message(self, browser):
-        page = ProductPage(browser, base_link)
-        page.open()
-        page.should_not_be_success_message()
-
-    def test_guest_can_add_product_to_basket(self, browser):
+    @pytest.mark.need_review
+    def test_user_can_add_product_to_basket(self, browser):
         page = ProductPage(browser, base_link)
         page.open()
         page.add_to_cart()
         page.should_be_item_name_in_add_to_cart_message()
         page.should_be_correct_cart_sum()
+
+    def test_user_cant_see_success_message(self, browser):
+        page = ProductPage(browser, base_link)
+        page.open()
+        page.should_not_be_success_message()
